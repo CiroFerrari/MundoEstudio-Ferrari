@@ -1,17 +1,45 @@
 // Declaración inicial de variables
-let monthAustralia = 1000;
-let monthAlemania = 900;
+const data = [
+  {
+    country: 'Australia',
+    monthlyCost: 1000,
+    currency: 'AUD',
+  },
+  {
+    country: 'Alemania',
+    monthlyCost: 900,
+    currency: '€',
+  },
+  {
+    country: 'Irlanda',
+    monthlyCost: 850,
+    currency: '€',
+  },
+  {
+    country: 'España',
+    monthlyCost: 700,
+    currency: '€',
+  },
+  {
+    country: 'Portugal',
+    monthlyCost: 600,
+    currency: '€',
+  },
+]
 
-let country = '';
-let months = 0;
-let total = 0;
+const countryArray = data.map((country) => country.country);
+let countryList = countryArray.join(', ');
+
+let countrySelected = '';
+let monthsSelected = 0;
+let totalResult = 0;
 
 // Ejecución de funciones
 presentation();
-country = selectCountry();
-months = selectMonths();
-total = calcResult(country, months);
-showResults(country, months, total);
+countrySelected = selectCountry();
+monthsSelected = selectMonths();
+totalResult = calcResult(countrySelected, monthsSelected);
+showResults(countrySelected, monthsSelected, totalResult);
 
 // Declaración de funciones
 function presentation() {
@@ -20,13 +48,17 @@ function presentation() {
 
 function selectCountry() {
   let option = '';
+  let countryArrayLowerCase = countryArray.map(country => country.toLowerCase());
 
-  option = prompt('Elige un país: Australia ó Alemania').toLowerCase();
+  option = prompt(`Elige un país:\n${countryList}`).toLowerCase();
 
-  while (option !== 'australia' && option !== 'alemania') {
-    option = prompt('Por favor, elija una opción correcta.\n\nElige un país: Australia ó Alemania').toLowerCase();
+  while (!(countryArrayLowerCase.includes(option))) {
+    option = prompt(`Por favor, elija una opción correcta.\n\nElige un país:\n${countryList}`).toLowerCase();
   }
-  console.log(option);
+
+  option = option.charAt(0).toUpperCase() + option.slice(1); // Capitaliza la primera letra
+
+  console.log("El país elegido es: ", option);
   return option;
 }
 
@@ -39,23 +71,20 @@ function selectMonths() {
     option = parseInt(prompt('Por favor, elija una opción correcta.\n\nElige la cantidad de meses: '));
   }
   option = parseInt(option);
-  console.log(option);
+  console.log("La cantidad de meses elegida es: ", option);
   return option;
 }
 
-function calcResult(country, months) {
-  let result = 0;
-  switch (country) {
-    case 'australia':
-      return result = monthAustralia * months;
-    case 'alemania':
-      return result = monthAlemania * months;
-    default:
-      return null;
-  }
+function calcResult(countrySelected, monthsSelected) {
+  let dataSelected = data.filter(country => country.country.toLowerCase() === countrySelected.toLowerCase());
+
+  let result = dataSelected[0].monthlyCost * monthsSelected; // Calcula el total
+  result = Intl.NumberFormat('en-US').format(result); // Agrega el separador de miles al número
+  result = `${result} ${dataSelected[0].currency}`; // Agrega el símbolo de la moneda al resultado
+
+  return result;
 }
 
-function showResults(country, months, total) {
-  total = Intl.NumberFormat('en-US').format(total); // Agrega el separador de mil en el número
-  alert(`Su país elegido es: ${country}\n\nLa cantidad de meses elegida es: ${months}\n\nEl total que debe ahorrar es: ${total} USD`);
+function showResults(countrySelected, monthsSelected, totalResult) {
+  alert(`Su país elegido es: ${countrySelected}\n\nLa cantidad de meses elegida es: ${monthsSelected}\n\nEl total que debe ahorrar es: ${totalResult}`);
 }
