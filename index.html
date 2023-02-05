@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
   <title>Mundo Estudio</title>
 </head>
+
 <body>
   <h1>Bienvenidos a Mundo Estudio</h1>
-  <p>Aquí podrás calcular la cantidad de dinero que exige cada país para solicitar la Visa de Estudio.</p>
+  <i>Aquí podrás calcular la cantidad de dinero que exige cada país para solicitar la Visa de Estudio.</i>
+  <form>
+    <label for="countrySelect">
+      Elegir país donde quieres estudiar:
+      <select name="country" id="countrySelect">
+        <option value="none">Seleccionar país</option>
+      </select>
+    </label>
+    <label for="monthInput">
+      Cantidad de meses que quieres estudiar:
+      <input type="number" id="monthInput">
+    </label>
+    <button type="submit" id="calcButton">Calcular resultado</button>
+  </form>
+  <p>Resultado:</p>
+  <p id="resultP"></p>
   <script src="./js/index.js"></script>
 </body>
+
 </html>

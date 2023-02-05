@@ -1,4 +1,6 @@
-// Declaración inicial de variables
+/**
+ * JSON 
+ */
 const data = [
   {
     country: 'Australia',
@@ -25,66 +27,65 @@ const data = [
     monthlyCost: 600,
     currency: '€',
   },
-]
+];
 
-const countryArray = data.map((country) => country.country);
-let countryList = countryArray.join(', ');
-
+/**
+ * Declaración inicial de variables
+ */
 let countrySelected = '';
 let monthsSelected = 0;
 let totalResult = 0;
 
-// Ejecución de funciones
-presentation();
-countrySelected = selectCountry();
-monthsSelected = selectMonths();
-totalResult = calcResult(countrySelected, monthsSelected);
-showResults(countrySelected, monthsSelected, totalResult);
+/**
+ * Manipulación del DOM 
+ */
+const countrySelect = document.getElementById("countrySelect");
+const monthInput = document.getElementById("monthInput");
+const resultP = document.getElementById("resultP");
+const calcButton = document.getElementById("calcButton");
 
-// Declaración de funciones
-function presentation() {
-  alert('¡Bienvenido! \n\nVamos a calcular la cantidad de dinero necesario para conseguir la visa de estudiante en el país de su elección')
+// Imprimir países como opciones
+for (country of data) {
+  countrySelect.innerHTML += `<option value="${country.country}">${country.country}</option>`;
 }
 
-function selectCountry() {
-  let option = '';
-  let countryArrayLowerCase = countryArray.map(country => country.toLowerCase());
+// Capturar el país elegido
+countrySelect.addEventListener('change', () => {
+  countrySelected = countrySelect.value;
+});
 
-  option = prompt(`Elige un país:\n${countryList}`).toLowerCase();
+// Capturar la cantidad de meses elegida
+monthInput.addEventListener('change', () => {
+  monthsSelected = monthInput.value;
+});
 
-  while (!(countryArrayLowerCase.includes(option))) {
-    option = prompt(`Por favor, elija una opción correcta.\n\nElige un país:\n${countryList}`).toLowerCase();
-  }
+// Evento 'click' en botón 'Calcular resultado'
+calcButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  totalResult = calcResult(countrySelected, monthsSelected);
+  resultP.innerText = totalResult;
+  resultP.classList.add("result-p");
+});
 
-  option = option.charAt(0).toUpperCase() + option.slice(1); // Capitaliza la primera letra
+/**
+ * Declaración de funciones
+ */
 
-  console.log("El país elegido es: ", option);
-  return option;
-}
-
-function selectMonths() {
-  let option = 0;
-
-  option = parseInt(prompt('Elige la cantidad de meses que desea estudiar allí:'));
-
-  while (!option) {
-    option = parseInt(prompt('Por favor, elija una opción correcta.\n\nElige la cantidad de meses: '));
-  }
-  option = parseInt(option);
-  console.log("La cantidad de meses elegida es: ", option);
-  return option;
-}
-
+// Calcular resultado
 function calcResult(countrySelected, monthsSelected) {
-  let dataSelected = data.filter(country => country.country.toLowerCase() === countrySelected.toLowerCase());
+  if (!countrySelected) {
+    return "Por favor, ingrese un país";
+  }
 
-  let result = dataSelected[0].monthlyCost * monthsSelected; // Calcula el total
+  if (!monthsSelected) {
+    return "Por favor, ingrese cantidad de meses";
+  }
+
+  let dataSelected = data.find(country => country.country.toLowerCase() === countrySelected.toLowerCase());
+
+  let result = dataSelected.monthlyCost * monthsSelected; // Calcula el total
   result = Intl.NumberFormat('en-US').format(result); // Agrega el separador de miles al número
-  result = `${result} ${dataSelected[0].currency}`; // Agrega el símbolo de la moneda al resultado
+  result = `${result} ${dataSelected.currency}`; // Agrega el símbolo de la moneda al resultado
 
   return result;
-}
-
-function showResults(countrySelected, monthsSelected, totalResult) {
-  alert(`Su país elegido es: ${countrySelected}\n\nLa cantidad de meses elegida es: ${monthsSelected}\n\nEl total que debe ahorrar es: ${totalResult}`);
-}
+};
