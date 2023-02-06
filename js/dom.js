@@ -35,6 +35,7 @@ const data = [
 let countrySelected = '';
 let monthsSelected = 0;
 let totalResult = 0;
+let favorites = [];
 
 /**
  * Manipulación del DOM 
@@ -43,6 +44,10 @@ const countrySelect = document.getElementById("countrySelect");
 const monthInput = document.getElementById("monthInput");
 const resultP = document.getElementById("resultP");
 const calcButton = document.getElementById("calcButton");
+const favButton = document.getElementById("favButton");
+const favP = document.getElementById("favP");
+const favUl = document.getElementById("favUl");
+const deleteFavButton = document.getElementById("deleteFavButton");
 
 // Imprimir países como opciones
 for (country of data) {
@@ -67,6 +72,15 @@ if ((localStorage.getItem("country")) && (localStorage.getItem("month"))) {
   resultP.classList.add("result-p");
 }
 
+// Si hay favoritos en localStorage, imprimirlos
+if (localStorage.getItem("favorites")) {
+  let favoritos = JSON.parse(localStorage.getItem("favorites"));
+  console.log(favoritos)
+  for(favorito of favoritos) {
+    favUl.innerHTML += `<li>${favorito.country} ${favorito.month} meses: ${favorito.total}</li>`;
+  }
+}
+
 // Capturar el país elegido
 countrySelect.addEventListener('change', () => {
   countrySelected = countrySelect.value;
@@ -86,3 +100,48 @@ calcButton.addEventListener('click', (event) => {
   resultP.innerText = totalResult;
   resultP.classList.add("result-p");
 });
+
+// Evento 'click' en botón 'Agregar a favoritos'
+favButton.addEventListener('click', () => {
+  let favoritos = [];
+  if (localStorage.getItem("favorites")) {
+    favoritos = JSON.parse(localStorage.getItem("favorites"));
+  }
+
+  let paisElegido = "";
+  if(localStorage.getItem("country")) {
+    paisElegido = localStorage.getItem("country").toUpperCase();
+  } else {
+    paisElegido = countrySelected;
+  }
+
+  let mesesElegido = "";
+  if(localStorage.getItem("month")) {
+    mesesElegido = localStorage.getItem("month");
+  } else {
+    mesesElegido = monthsSelected;
+  }
+
+  let resultado = calcResult(paisElegido, mesesElegido);
+  resultP.innerText = resultado;
+
+  favoritos.push({
+    country: paisElegido,
+    month: mesesElegido,
+    total: resultado,
+  })
+  
+  favUl.innerHTML = '';
+  for(favorito of favoritos) {
+    favUl.innerHTML += `<li>${favorito.country} ${favorito.month} meses: ${favorito.total}</li>`;
+  }
+
+  localStorage.setItem("favorites", JSON.stringify(favoritos));
+});
+
+// Evento "click" en botón "Borrar favoritos"
+deleteFavButton.addEventListener("click", () => {
+  localStorage.clear();
+  favUl.innerHTML = '';
+  location.reload();
+})
