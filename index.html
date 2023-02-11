@@ -5,9 +5,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Toastify JS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
   <title>Mundo Estudio</title>
 </head>
@@ -24,7 +28,7 @@
     </label>
     <label for="monthInput">
       Cantidad de meses que quieres estudiar:
-      <input type="number" id="monthInput">
+      <input type="number" id="monthInput" min="0">
     </label>
     <button type="submit" id="calcButton">Calcular resultado</button>
   </form>
@@ -34,7 +38,16 @@
   <hr>
   <h3 id="favP">Favoritos:</h3>
   <ul id="favUl"></ul>
+  <p id="favUpdateP"></p>
   <button id="deleteFavButton">Borrar favoritos</button>
+  
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Toastify JS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <!-- Luxon -->
+  <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></script>
+  <!-- Scripts -->
   <script src="./js/index.js"></script>
   <script src="./js/dom.js"></script>
 </body>

@@ -36,6 +36,7 @@ let countrySelected = '';
 let monthsSelected = 0;
 let totalResult = 0;
 let favorites = [];
+const DateTime = luxon.DateTime;
 
 /**
  * Manipulación del DOM 
@@ -47,6 +48,7 @@ const calcButton = document.getElementById("calcButton");
 const favButton = document.getElementById("favButton");
 const favP = document.getElementById("favP");
 const favUl = document.getElementById("favUl");
+const favUpdateP = document.getElementById("favUpdateP");
 const deleteFavButton = document.getElementById("deleteFavButton");
 
 // Imprimir países como opciones
@@ -76,8 +78,11 @@ if ((localStorage.getItem("country")) && (localStorage.getItem("month"))) {
 if (localStorage.getItem("favorites")) {
   let favoritos = JSON.parse(localStorage.getItem("favorites"));
   for (favorito of favoritos) {
-    favUl.innerHTML += `<li>${favorito.country} ${favorito.month} meses: ${favorito.total}</li>`;
+    const { country, month, total, date } = favorito;
+    favUl.innerHTML += `<li>${country} ${month} meses: ${total}</li>`;
   };
+  let fecha = localStorage.getItem("lastUpdate");
+  favUpdateP.innerHTML = `Última actualización: ${fecha}`;
 };
 
 // Capturar el país elegido
@@ -102,6 +107,7 @@ calcButton.addEventListener('click', (event) => {
 
 // Evento 'click' en botón 'Agregar a favoritos'
 favButton.addEventListener('click', () => {
+
   let favoritos = JSON.parse(localStorage.getItem("favorites")) || [];
 
   let paisElegido = localStorage.getItem("country") || countrySelected || "";
@@ -111,21 +117,39 @@ favButton.addEventListener('click', () => {
   let resultado = calcResult(paisElegido, mesesElegido);
   resultP.innerText = resultado;
 
-  (paisElegido !== "" && mesesElegido !== 0)
+  let fecha = DateTime.now().setLocale('es').toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY).toUpperCase() + " a las " + DateTime.now().toLocaleString(DateTime.TIME_SIMPLE);
+
+  (paisElegido !== "" && mesesElegido > 0)
     && (
       favoritos.push({
         country: paisElegido.toUpperCase(),
         month: mesesElegido,
         total: resultado,
       })
+    ) && (
+      Toastify({
+        text: `¡${paisElegido.toUpperCase()} agregado a Favoritos!`,
+        duration: 3000,
+        gravity: "bottom",
+        position: "left",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #00b09b, #0ca5e9)",
+        },
+      }).showToast()
+      && (
+        favUpdateP.innerHTML = `Última actualización: ${fecha}`
+      )
     );
 
   favUl.innerHTML = '';
   for (favorito of favoritos) {
-    favUl.innerHTML += `<li>${favorito.country} ${favorito.month} meses: ${favorito.total}</li>`;
+    const { country, month, total, date } = favorito;
+    favUl.innerHTML += `<li>${country} ${month} meses: ${total}</li>`;
   };
 
   localStorage.setItem("favorites", JSON.stringify(favoritos));
+  localStorage.setItem("lastUpdate", fecha)
 });
 
 // Evento "click" en botón "Borrar favoritos"
