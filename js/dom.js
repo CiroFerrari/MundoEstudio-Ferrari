@@ -52,34 +52,33 @@ const deleteFavButton = document.getElementById("deleteFavButton");
 // Imprimir países como opciones
 for (country of data) {
   countrySelect.innerHTML += `<option id="${country.country.toLowerCase()}" value="${country.country}">${country.country}</option>`;
-}
+};
 
 // Si existe país en localStorage, imprimirlo
 if (localStorage.getItem("country")) {
   let optionSelected = document.getElementById(localStorage.getItem("country"));
   optionSelected.selected = true;
-}
+};
 
 // Si existen meses en localStorage, imprimirlos
 if (localStorage.getItem("month")) {
   monthInput.value = localStorage.getItem("month");
-}
+};
 
 // Si hay país y meses en localStorage, imprimir resultado
 if ((localStorage.getItem("country")) && (localStorage.getItem("month"))) {
   totalResult = calcResult(countrySelected, monthsSelected);
   resultP.innerText = totalResult;
   resultP.classList.add("result-p");
-}
+};
 
 // Si hay favoritos en localStorage, imprimirlos
 if (localStorage.getItem("favorites")) {
   let favoritos = JSON.parse(localStorage.getItem("favorites"));
-  console.log(favoritos)
-  for(favorito of favoritos) {
+  for (favorito of favoritos) {
     favUl.innerHTML += `<li>${favorito.country} ${favorito.month} meses: ${favorito.total}</li>`;
-  }
-}
+  };
+};
 
 // Capturar el país elegido
 countrySelect.addEventListener('change', () => {
@@ -103,38 +102,28 @@ calcButton.addEventListener('click', (event) => {
 
 // Evento 'click' en botón 'Agregar a favoritos'
 favButton.addEventListener('click', () => {
-  let favoritos = [];
-  if (localStorage.getItem("favorites")) {
-    favoritos = JSON.parse(localStorage.getItem("favorites"));
-  }
+  let favoritos = JSON.parse(localStorage.getItem("favorites")) || [];
 
-  let paisElegido = "";
-  if(localStorage.getItem("country")) {
-    paisElegido = localStorage.getItem("country").toUpperCase();
-  } else {
-    paisElegido = countrySelected;
-  }
+  let paisElegido = localStorage.getItem("country") || countrySelected || "";
 
-  let mesesElegido = "";
-  if(localStorage.getItem("month")) {
-    mesesElegido = localStorage.getItem("month");
-  } else {
-    mesesElegido = monthsSelected;
-  }
+  let mesesElegido = localStorage.getItem("month") || monthsSelected || 0;
 
   let resultado = calcResult(paisElegido, mesesElegido);
   resultP.innerText = resultado;
 
-  favoritos.push({
-    country: paisElegido,
-    month: mesesElegido,
-    total: resultado,
-  })
-  
+  (paisElegido !== "" && mesesElegido !== 0)
+    && (
+      favoritos.push({
+        country: paisElegido.toUpperCase(),
+        month: mesesElegido,
+        total: resultado,
+      })
+    );
+
   favUl.innerHTML = '';
-  for(favorito of favoritos) {
+  for (favorito of favoritos) {
     favUl.innerHTML += `<li>${favorito.country} ${favorito.month} meses: ${favorito.total}</li>`;
-  }
+  };
 
   localStorage.setItem("favorites", JSON.stringify(favoritos));
 });
@@ -144,4 +133,4 @@ deleteFavButton.addEventListener("click", () => {
   localStorage.clear();
   favUl.innerHTML = '';
   location.reload();
-})
+});
