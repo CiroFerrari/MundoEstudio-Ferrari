@@ -2,6 +2,30 @@
  * Declaración de funciones
  */
 
+// Saludo inicial
+Toastify({
+  text: "¡Bienvenido a Mundo Estudio!",
+  duration: 3000,
+  gravity: "top",
+  position: "center",
+  stopOnFocus: true,
+  style: {
+    background: "linear-gradient(to right, #00b09b, #0ca5e9)",
+  },
+}).showToast()
+setTimeout(() => {
+  Toastify({
+    text: "¡Esperamos que lo disfrutes!",
+    duration: 3000,
+    gravity: "bottom",
+    position: "left",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #00b09b, #0ca5e9)",
+    },
+  }).showToast()
+}, 3000);
+
 // Calcular resultado
 function calcResult() {
   let countrySelected = localStorage.getItem("country");

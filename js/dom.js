@@ -148,13 +148,65 @@ favButton.addEventListener('click', () => {
     favUl.innerHTML += `<li>${country} ${month} meses: ${total}</li>`;
   };
 
-  localStorage.setItem("favorites", JSON.stringify(favoritos));
-  localStorage.setItem("lastUpdate", fecha)
+  if (favorites.length > 0) {
+    localStorage.setItem("favorites", JSON.stringify(favoritos));
+    localStorage.setItem("lastUpdate", fecha);
+  };
 });
 
 // Evento "click" en botón "Borrar favoritos"
 deleteFavButton.addEventListener("click", () => {
-  localStorage.clear();
-  favUl.innerHTML = '';
-  location.reload();
+
+  Swal.fire({
+    title: '¿Seguro que desea eliminar los Favoritos?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Sí, seguro',
+    denyButtonText: `No, no borrar`,
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      // Se limpian los input y resultados en el DOM
+      document.getElementById("none").selected = true;
+      monthInput.value = 0;
+      resultP.innerText = "";
+      resultP.classList.remove("result-p");
+      favUl.innerHTML = '';
+
+      // Se reinician los valores de las variables
+      favUpdateP.innerHTML = "";
+      countrySelected = "";
+      monthsSelected = "";
+
+      // Se limpia el localStorage
+      localStorage.clear();
+
+      // Feedback al usuario
+      Toastify({
+        text: `¡Favoritos eliminados correctamente!`,
+        duration: 3000,
+        gravity: "bottom",
+        position: "left",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #00b09b, #0ca5e9)",
+        },
+      }).showToast();
+
+    } else if (result.isDenied) {
+
+      // Feedback al usuario
+      Toastify({
+        text: `¡No se han eliminado los Favoritos!`,
+        duration: 3000,
+        gravity: "bottom",
+        position: "left",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #00b09b, #0ca5e9)",
+        },
+      }).showToast();
+    };
+  });
 });
