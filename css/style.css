@@ -72,3 +72,24 @@ hr {
 ul {
   padding-left: 20px;
 }
+
+@media (max-width: 767px) {
+  body {
+    align-items: center;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  button#calcButton {
+    margin: 0 auto;
+  }
+
+  ul#favUl,
+  h3#favP,
+  p#favUpdateP {
+    align-self: flex-start;
+    margin: 0 20px;
+  }
+};
