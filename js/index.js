@@ -71,3 +71,29 @@ function calcResult() {
 
   return result;
 };
+
+// Obtener conversión de monedas desde una API externa
+let convertCurrency = {};
+const getConversionCurrency = async () => {
+  const response = await fetch('https://api.freecurrencyapi.com/v1/latest?apikey=MyCZlH7MtOEdO2WDqkU54qdHAknPPRRukNEemjRp');
+  convertCurrency = await response.json();
+}
+getConversionCurrency();
+
+// Convertir el resultado a USD
+function convertToUSD(totalResult) {
+  // Obtener el número del resultado
+  let spaceIndex = Array.from(totalResult).indexOf(" ");
+  let resultNumber = Array.from(totalResult).slice(0, spaceIndex).join('');
+
+  // Eliminar la coma del número
+  resultNumber = Array.from(resultNumber).filter(item => item !== ",").join('');
+
+  let currentCurrency = data.find(element => element.country.toLowerCase() === (localStorage.getItem("country"))).currencyData;
+  let convertRatio = convertCurrency.data[currentCurrency];
+
+  let convertedResult = (Number(resultNumber) / convertRatio).toFixed(0);
+  convertedResult = Intl.NumberFormat('en-US').format(convertedResult); // Agrega el separador de miles al número
+
+  return convertedResult;
+}

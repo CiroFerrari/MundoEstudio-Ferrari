@@ -41,17 +41,7 @@ let countrySelected = '';
 let monthsSelected = 0;
 let totalResult = 0;
 let favorites = [];
-let convertCurrency = {};
 const DateTime = luxon.DateTime;
-
-/**
- * Obtener conversión de monedas desde una API externa
- */
-const getConversionCurrency = async () => {
-  const response = await fetch('https://api.freecurrencyapi.com/v1/latest?apikey=MyCZlH7MtOEdO2WDqkU54qdHAknPPRRukNEemjRp');
-  convertCurrency = await response.json();
-}
-getConversionCurrency();
 
 /**
  * Manipulación del DOM 
@@ -124,19 +114,8 @@ calcButton.addEventListener('click', (event) => {
 // Evento 'click' en botón 'Convertir a USD'
 convertButton.addEventListener('click', async () => {
   totalResult = calcResult(countrySelected, monthsSelected);
-  
-  // Obtener el número del resultado
-  let spaceIndex = Array.from(totalResult).indexOf(" ");
-  resultNumber = Array.from(totalResult).slice(0, spaceIndex).join('');
 
-  // Eliminar la coma del número
-  resultNumber = Array.from(resultNumber).filter( item => item !== ",").join('');
-
-  let currentCurrency = data.find( element => element.country.toLowerCase() === (localStorage.getItem("country")) ).currencyData;
-  let convertRatio = convertCurrency.data[currentCurrency];
-
-  let convertedResult = (Number(resultNumber) / convertRatio).toFixed(0);
-  convertedResult = Intl.NumberFormat('en-US').format(convertedResult); // Agrega el separador de miles al número
+  let convertedResult = convertToUSD(totalResult);
 
   resultP.innerText = `${convertedResult} USD`;
   resultP.classList.add("result-p");
@@ -156,6 +135,7 @@ favButton.addEventListener('click', () => {
 
   let fecha = DateTime.now().setLocale('es').toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY).toUpperCase() + " a las " + DateTime.now().toLocaleString(DateTime.TIME_SIMPLE);
 
+  // Agregar a favoritos sólo si los inputs tienen valores válidos, y no se encuentra ya en favoritos para evitar repeticiones
   (paisElegido !== "" && mesesElegido > 0)
     && (
       favoritos.push({

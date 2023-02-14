@@ -2,6 +2,13 @@
 
 Proyecto del curso de JavaScript en CoderHouse.
 
+```
+Link al proyecto:
+
+https://ciroferrari.github.io/MundoEstudio-Ferrari/
+```
+
+
 ## En qué consiste el proyecto:
 
 - Para todos los interesados en estudiar en algún país extranjero, se ofrece la posibilidad de calcular cuánto dinero le exigirán para poder solicitar la visa de estudio. Esto varía respecto a cada país y a la cantidad de meses que se desea vivir allí.
