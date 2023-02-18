@@ -62,18 +62,18 @@ for (country of data) {
   countrySelect.innerHTML += `<option id="${country.country.toLowerCase()}" value="${country.country}">${country.country}</option>`;
 };
 
-// Si existe país en localStorage, imprimirlo
+// Si existe país en localStorage, imprimirlo como opción seleccionada
 if (localStorage.getItem("country")) {
   let optionSelected = document.getElementById(localStorage.getItem("country"));
   optionSelected.selected = true;
 };
 
-// Si existen meses en localStorage, imprimirlos
+// Si existen meses en localStorage, imprimirlo en el input de meses
 if (localStorage.getItem("month")) {
   monthInput.value = localStorage.getItem("month");
 };
 
-// Si hay país y meses en localStorage, imprimir resultado
+// Si hay país y meses en localStorage, calcular e imprimir resultado
 if ((localStorage.getItem("country")) && (localStorage.getItem("month"))) {
   totalResult = calcResult(countrySelected, monthsSelected);
   resultP.innerText = totalResult;
@@ -84,12 +84,27 @@ if ((localStorage.getItem("country")) && (localStorage.getItem("month"))) {
 if (localStorage.getItem("favorites")) {
   let favoritos = JSON.parse(localStorage.getItem("favorites"));
   for (favorito of favoritos) {
-    const { country, month, total, date } = favorito;
-    favUl.innerHTML += `<li>${country} ${month} meses: ${total}</li>`;
+    const { country, month, total, id } = favorito;
+    favUl.innerHTML += `<li>${country} ${month} meses: ${total} <button onclick="deleteOneFavorite(${id})">Eliminar</button></li>`;
   };
   let fecha = localStorage.getItem("lastUpdate");
   favUpdateP.innerHTML = `Última actualización: ${fecha}`;
 };
+
+// Función para eliminar un favorito, recibe el ID del favorito a eliminar, filtra el localStorage, y vuelve a imprimirlos
+const deleteOneFavorite = (id) => {
+  let favoritos = JSON.parse(localStorage.getItem("favorites"));
+
+  favoritos = favoritos.filter(item => item.id !== id);
+
+  localStorage.setItem("favorites", JSON.stringify(favoritos));
+
+  favUl.innerHTML = '';
+  for (favorito of favoritos) {
+    const { country, month, total, id } = favorito;
+    favUl.innerHTML += `<li>${country} ${month} meses: ${total} <button onclick="deleteOneFavorite(${id})">Eliminar</button></li>`;
+  };
+}
 
 // Capturar el país elegido
 countrySelect.addEventListener('change', () => {
@@ -142,6 +157,7 @@ favButton.addEventListener('click', () => {
         country: paisElegido.toUpperCase(),
         month: mesesElegido,
         total: resultado,
+        id: favoritos.length + 1
       })
     ) && (
       Toastify({
@@ -161,8 +177,8 @@ favButton.addEventListener('click', () => {
 
   favUl.innerHTML = '';
   for (favorito of favoritos) {
-    const { country, month, total, date } = favorito;
-    favUl.innerHTML += `<li>${country} ${month} meses: ${total}</li>`;
+    const { country, month, total, id } = favorito;
+    favUl.innerHTML += `<li>${country} ${month} meses: ${total} <button onclick="deleteOneFavorite(${id})">Eliminar</button></li>`;
   };
 
   if (favoritos.length > 0) {

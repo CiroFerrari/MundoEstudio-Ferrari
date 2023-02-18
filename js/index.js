@@ -80,7 +80,7 @@ const getConversionCurrency = async () => {
 }
 getConversionCurrency();
 
-// Convertir el resultado a USD
+// Convertir el resultado a USD - uso de API externa para conversión en tiempo real
 function convertToUSD(totalResult) {
   // Obtener el número del resultado
   let spaceIndex = Array.from(totalResult).indexOf(" ");
@@ -89,7 +89,10 @@ function convertToUSD(totalResult) {
   // Eliminar la coma del número
   resultNumber = Array.from(resultNumber).filter(item => item !== ",").join('');
 
+  // Obtener la moneda local que se quiere convertir a USD
   let currentCurrency = data.find(element => element.country.toLowerCase() === (localStorage.getItem("country"))).currencyData;
+
+  // Obtener la relación entre la moneda y el USD
   let convertRatio = convertCurrency.data[currentCurrency];
 
   let convertedResult = (Number(resultNumber) / convertRatio).toFixed(0);

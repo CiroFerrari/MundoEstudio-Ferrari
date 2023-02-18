@@ -13,7 +13,7 @@ body {
   padding-left: 2.5vw;
   margin-top: 7.5vh;
   gap: 25px;
-  padding-bottom: 5vh;
+  padding-bottom: 10vh;
 }
 
 form {
@@ -71,6 +71,13 @@ hr {
 
 ul {
   padding-left: 20px;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 767px) {
