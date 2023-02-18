@@ -2,12 +2,7 @@
 
 Proyecto del curso de JavaScript en CoderHouse.
 
-```
-Link al proyecto:
-
-https://ciroferrari.github.io/MundoEstudio-Ferrari/
-```
-
+Link al proyecto: https://ciroferrari.github.io/MundoEstudio-Ferrari/
 
 ## En qué consiste el proyecto:
 
