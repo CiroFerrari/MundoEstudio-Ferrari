@@ -45,14 +45,10 @@ button {
   background-color: white;
 }
 
-/* select:hover,
+select:hover,
 input:hover {
   background-color: #0ca5e980;
   color: white;
-} */
-
-select:focus {
-  color: transparent;
 }
 
 button:hover {
